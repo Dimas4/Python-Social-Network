@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+
+{% block body %}
+
+{% if own_musics  %}
+<h2 class="alert alert-info text-center">Ваши аудиозаписи:</h2>
+<br>
+{% for music in own_musics %}
+
+<div class="container">
+<div class="row">
+
+    <div class="col-xs-12">
+
+<div class="alert alert-info">
+    <div class="row">
+        <div class="col-xs-2">
+            {% if music.image %}
+                <img src="{{ music.image.url }}" width="160" height="160">
+                <br>
+            <br>
+                <a class="btn btn-danger btn-sm" href="{% url 'music:change_files' operation='remove' pk=music.pk %}">Удалить из аудиозаписей</a>
+            {% endif %}
+        </div>
+        <div class="col-xs-9">
+            <h2><b>Название:</b>{{music.text}} - Опубликовано: {{ music.data_time }}</h2>
+
+            <!--<audio controls>-->
+                <!--<source src="{{music.our_file.url}}" type="audio/mp3">-->
+            <!--</audio>-->
+            <audio src="{{music.our_file.url}}" ></audio>
+            <h3>Опубликовал: {{ music.user.get_full_name }}</h3>
+
+        </div>
+    </div>
+
+
+</div>
+
+    </div>
+</div>
+    </div>
+{% endfor %}
+{% else %}
+<h2 class="alert alert-info text-center">У Вас нет аудиозаписей:</h2>
+{% endif %}
+<!--<h2>{{music.artist}}</h2>-->
+<!--<div class="container">-->
+    <!--<div class="row">-->
+        <!--<br>-->
+        <!--<div class="col-xs-5">-->
+            <!--<audio controls>-->
+                <!--<source src="{{music}}" type="audio/mp3">-->
+            <!--</audio>-->
+            <!--&lt;!&ndash;<br>&ndash;&gt;-->
+            <!--&lt;!&ndash;<a href="">Удалить из аудиозаписей</a>&ndash;&gt;-->
+            <!--<hr>-->
+        <!--</div>-->
+    <!--</div>-->
+<!--</div>-->
+
+<div class="container">
+    <div class="row">
+        <div class="col-xs-12">
+            <br>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-8">
+                    <h2 class="text-center alert alert-info">Вся музыка:</h2>
+                    <hr>
+                </div>
+            </div>
+            {% if musics %}
+                {% for music in musics %}
+                <div class="alert alert-info">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            {% if music.image %}
+                                <img src="{{ music.image.url }}" width="160" height="160">
+                            <br><br>
+                            <a class="btn btn-success btn-sm" href="{% url 'music:change_files' operation='add' pk=music.pk %}">Добавить в аудиозаписи</a>
+
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-9">
+                            <h2><b>Название:</b>{{music.text}} - Опубликовано: {{ music.data_time }}</h2>
+                            <audio src="{{music.our_file.url}}" ></audio>
+
+                            <h3>Опубликовал: {{ music.user.get_full_name }}</h3>
+                        </div>
+                    </div>
+
+
+                </div>
+                <hr>
+                {% endfor %}
+            <a href="{% url 'music:newmusic'%}" class="btn btn-success btn-lg">Добавить свою музыку</a>
+            <br><br><br>
+            {% else %}
+            <br>
+            <hr>
+            <br>
+            <div class="row">
+                <div class="col-xs-2"></div>
+                <div class="col-xs-8">
+                    <h3 class=" text-center alert alert-warning">К сожалению, в данный момент музыки нет</h3>
+                    <a href="{% url 'music:newmusic'%}" class="btn btn-success btn-lg">Добавить свою музыку</a>
+                </div>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+</div>
+{% endblock %}

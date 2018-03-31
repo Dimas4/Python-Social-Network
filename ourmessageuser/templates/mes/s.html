@@ -1,0 +1,79 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<br>
+<h2 class="text-center">Диалог:</h2>
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-3"></div>
+        <div class="col-xs-6">
+            <form action="{% url 'ourmessageuser:send_msg' pk=pr_k %}" method="post">
+                {% csrf_token %}
+                {{form.post}}
+                <br>
+                <button type="submit" class="btn btn-success btn-lg">Отправить</button>
+            </form>
+        </div>
+    </div>
+</div>
+<hr>
+<br>
+<div class="container">
+    <div class="row">
+        {% for message in messages_moi %}
+            {% if message.user.pk == user.pk %}
+                <div class="container">
+                  <div class="row">
+                    <div class="col-xs-6"></div>
+                    <div class="col-xs-6 btn btn-success">
+                      <h3>{{message.post}}</h3>
+                      <p>{{message.user.username}} - {{message.created}}</p>
+                    </div>
+                  </div>
+                </div>
+
+
+                <!--<div class="row">-->
+                <!--<div class="col-xs-6"></div>-->
+                <!--<div class="col-xs-6 btn btn-success">-->
+                    <!--<h3>{{message.post}}</h3>-->
+                    <!--<p style="font-size: 18px;">{{message.user.username}}             -           {{message.created}}</p>-->
+                <!--</div>-->
+                <!--</div>-->
+            <br>
+            {% else %}
+            <div class="row">
+                <div class="col-xs-6 btn btn-info">
+                    <h3>{{message.post}}</h3>
+                    <p style="font-size: 18px;">{{message.user.username}}            -           {{message.created}}</p>
+                </div>
+            </div>
+            <br>
+            {% endif %}
+        {% endfor %}
+            <!--<h3>Ваши сообщения:</h3>-->
+            <!--<hr>-->
+            <!--{% for message_moi in messages_moi %}-->
+                <!--<p style="font-size: 16px;">{{message_moi.post}} - {{message_moi.created}}</p>-->
+            <!--{% endfor %}-->
+
+        <!--</div>-->
+        <!--<div class="col-xs-6">-->
+            <!--<h3>Сообщения собеседника:</h3>-->
+            <!--<hr>-->
+            <!--{% for message2_ego in messages2_ego %}-->
+                <!--<p style="font-size: 16px;">{{message2_ego.post}} - {{message2_ego.created}}</p>-->
+            <!--{% endfor %}-->
+
+    </div>
+</div>
+
+
+
+
+
+
+
+
+{% endblock %}

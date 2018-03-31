@@ -1,0 +1,160 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block head %}
+<title>Dialog</title>
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+<link rel="stylesheet" href="{% static 'accounts/stylqwee.css' %}">
+<link rel="stylesheet" href="{% static 'accounts/newstylechat.css' %}">
+
+{% endblock %}
+{% block body %}
+<div class="container">
+</div>
+<div class="dialog-space">
+  <div class="body-chat">
+    <div class="chatbox">
+      <div class="chatlogs" id="chat-log">
+        {% for message in messages %}
+          {% if message.user.id == request.user.id %}
+          <div class="chat self">
+
+            {% if request.user.userprofile.image %}
+            <div class="user" style="background-image:url('{{ request.user.userprofile.image.url }}')">
+            {% else %}
+                <div class="user" style="background-image:url('/media/profile_image/gentle-standart.jpg')">
+            {% endif %}
+          {% else %}
+          <div class="chat friend">
+
+            {% if interlocutor.userprofile.image %}
+            <div class="user" style="background-image:url('{{ interlocutor.userprofile.image.url }}')">
+            {% else %}
+                <div class="user" style="background-image:url('/media/profile_image/gentle-standart.jpg')">
+            {% endif %}
+          {% endif %}
+            </div>
+            <p class="chat-message">{{ message.text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="chat-form">
+        <input
+            id="chat-message-input"
+            type="text"
+            class="form-control"
+            size="100"
+            placeholder="Введите сообщение..."
+            aria-label="Recipient's username"
+            aria-describedby="basic-addon2"
+          />
+          <button id="chat-message-submit" type="button">Отправить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var chatList = document.getElementById('chat-log');
+  chatList.scrollTop = chatList.scrollHeight;
+</script>
+<script>
+    var roomName = {{ room_name_json }};
+
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chat/' + roomName + '/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        var pk = data['pk'];
+        var msg_date = data['msg_date'];
+        // document.querySelector('.chat-body').value += (message + '\n');
+        var msg_in_html = `<div class="chat `;
+        if (pk=={{request.user.id}}){
+          msg_in_html += `self">`;
+          msg_in_html += `<div class="user" style="background-image:url('`;
+
+          {% if request.user.userprofile.image %}
+          msg_in_html += `{{ request.user.userprofile.image.url }}`;
+          {% else %}
+            {% if request.user.userprofile.sex == 'M' %}
+            msg_in_html += `/media/profile_image/gentle-standart.jpg`;
+            {% else %}
+            msg_in_html += `/media/profile_image/lady-standart.jpg`;
+            {% endif %}
+          {% endif %}
+        } else {
+          msg_in_html += `friend">`;
+          msg_in_html += `<div class="user" style="background-image:url('`;
+
+          {% if interlocutor.userprofile.image %}
+          msg_in_html += `{{ interlocutor.userprofile.image.url }}`;
+          {% else %}
+            {% if interlocutor.userprofile.sex == 'M' %}
+            msg_in_html += `/media/profile_image/gentle-standart.jpg`;
+            {% else %}
+            msg_in_html += `/media/profile_image/lady-standart.jpg`;
+            {% endif %}
+          {% endif %}
+        };
+        msg_in_html += `')"></div><p class="chat-message">`+message+`</p></div>`;
+        console.log(msg_in_html);
+        $('.chatlogs').append(msg_in_html);
+        if (pk=={{request.user.id}}){
+          var chatList = document.getElementById('chat-log');
+          chatList.scrollTop = chatList.scrollHeight;
+        };
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        if (message != '') {
+          chatSocket.send(JSON.stringify({
+            'pk': {{ request.user.id }},
+            'message': message
+
+          }));
+        };
+
+
+        messageInputDom.value = '';
+    };
+</script>
+{% endblock %}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+<!--{% load %}-->
+
+{% block body %}
+<br>
+<div class="container">
+    <h1>Добро пожаловать!</h1>
+    <p>
+        Войди в свой аккаунт либо <a href="{% url 'accounts:register' %}">зарегистрируйся</a>!
+    </p>
+    <h2>Войти</h2>
+    <form method="post">
+        {% csrf_token %}
+        <h3>Введите логин:</h3>
+        {{ form.username }}
+        <h3>Введите пароль:</h3>
+        {{ form.password }}
+        <br>
+        <br>
+        <button type="submit" class="btn btn-success">Подтвердить</button>
+    </form>
+</div>
+{% endblock %}

@@ -1,0 +1,58 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+    <div class="row">
+    <div class="row">
+    <div class="col-xs-2"></div>
+    <div class="col-md-8">
+        <div class="container">
+            <br>
+
+        <h2>Все Ваши сообщения:</h2>
+        <br>
+        </div>
+        <!--<form method="post">-->
+            <!--{% csrf_token %}-->
+            <!--{{ form.post }}-->
+            <!--<br>-->
+            <!--<button type="submit">Submit</button>-->
+        <!--</form>-->
+        <h2>{{ text }}</h2>
+        {% for post in posts %}
+
+                <div class="col-xs-10">
+                    <div id="tb-testimonial" class="testimonial testimonial-success">
+                        <div class="testimonial-section" style="font-size: 24px;">
+                             {{ post.post }}
+                            <br>
+                        </div>
+                    <div class="testimonial-desc">
+                    <div class="testimonial-writer">
+                    	<div class="testimonial-writer-name" style="font-size: 18px;">{{ post.user.get_full_name }}</div>
+                    	<div class="testimonial-writer-designation" style="font-size: 16px;">{{ post.created }}</div>
+
+                    </div>
+                    </div>
+                    </div>
+		        </div>
+                <br>
+        <br><br><br><br><br><br><br>
+
+
+        {% endfor %}
+
+            <div class="col-xs-4"></div>
+            <div class="col-xs-4">
+                <a href="{% url 'home:home' %}" class="btn btn-info btn-lg">Обратно</a>
+            </div>
+
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

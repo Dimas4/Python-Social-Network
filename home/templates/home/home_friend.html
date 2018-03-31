@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+    <div class="row">
+    <div class="row">
+
+    <div class="col xs-5">
+        {% if friends%}
+            <h2>Ваши друзья:</h2>
+                {% for friend in friends %}
+
+                    <a href="{% url 'accounts:view_profile_with_pk' pk=user.pk %}">
+                        <div class="row">
+                        <div class="col-xs-1">
+                            {% if friend.userprofile.image %}
+                                <img src="{{ friend.userprofile.image.url }}" width="70" height="70">
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-10">
+                            <p style="font-size: 35px;">{{ friend.username }}</p>
+                        </div>
+                        </div>
+
+                    </a>
+                    <a href="/messages/{{friend.pk}}-{{request.user.id}}">
+                        <h3><b>Открыть диалог с</b> {{ friend.username }}</h3>
+                    </a>
+                    <a href="{% url 'home:change_friends' operation='remove' pk=friend.pk %}">
+                    <button type="button" class="btn btn-default">Удалить из друзей</button>
+                    </a>
+                <hr>
+
+            <!--<a href="{% url 'home:change_friends_user' operation='add' pk=user.pk %}">-->
+            <!--<button type="button" class="btn btn-success">Добавить в друзья</button>-->
+            <!--</a>-->
+        <!--<hr>-->
+
+            {% endfor %}
+        {% else %}
+            <h2>У вас нет друзей</h2>
+        {% endif %}
+        <br>
+        <a href="{% url 'home:home' %}" class="btn btn-info btn-lg">Обратно</a>
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

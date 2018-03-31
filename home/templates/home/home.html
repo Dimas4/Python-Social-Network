@@ -1,0 +1,341 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block head %}
+<title>Dialog</title>
+<!-- <link href="//netdna.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+<script src="//netdna.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script src="//code.jquery.com/jquery-1.11.1.min.js"></script> -->
+<link rel="stylesheet" href="{% static 'accounts/stylqwe.css' %}">
+
+{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+    <div class="row">
+    <div class="row">
+
+    <div class="col-md-8">
+        <div class="container">
+            <br>
+        <h2>Ваши сообщения:</h2>
+        <br>
+        </div>
+        <!--<form method="post">-->
+            <!--{% csrf_token %}-->
+            <!--{{ form.post }}-->
+            <!--<br>-->
+            <!--<button type="submit">Submit</button>-->
+        <!--</form>-->
+        <h2>{{ text }}</h2>
+        <!--{% for messages in messagess %}-->
+                <!--<div class="col-xs-10">-->
+                    <!--<div id="tb-testimonial" class="testimonial testimonial-success">-->
+                        <!--<div class="testimonial-section" style="font-size: 24px;">-->
+                             <!--{{ messages.text }}-->
+                            <!--<br>-->
+                        <!--</div>-->
+                    <!--<div class="testimonial-desc">-->
+                    <!--<div class="testimonial-writer">-->
+                    	<!--<div class="testimonial-writer-name" style="font-size: 18px;">{{ messages.user.get_full_name }}</div>-->
+                    	<!--<div class="testimonial-writer-designation" style="font-size: 16px;">{{ messages.data_create }}</div>-->
+
+                    <!--</div>-->
+                    <!--</div>-->
+                    <!--</div>-->
+		        <!--</div>-->
+                <!--<br>-->
+        <!--<br><br><br><br><br><br><br>-->
+
+
+        <!--{% endfor %}-->
+
+            <div class="col-xs-3"></div>
+            <div class="col-xs-4">
+                <a href="{% url 'home:allmessage' %}" class="btn btn-info btn-lg">Показать все сообщения</a>
+            </div>
+        <br><br><br><br>
+        <hr>
+
+
+        <h2 class="text-center alert alert-info">Глобальный асинхронный чат:</h2>
+
+
+        <div class="container">
+</div>
+<div class="dialog-space">
+  <div class="body-chat">
+    <div class="chatbox">
+      <div class="chatlogs" id="chat-log">
+        {% for message in messages %}
+          {% if message.user.id == request.user.id %}
+          <div class="chat self">
+            {% if request.user.is_staff %}
+            <div class="user" style="background-image:url('/media/profile_image/staff-standart.jpg')">
+            {% elif request.user.userprofille.image %}
+            <div class="user" style="background-image:url('{{ request.user.userprofille.image.url }}')">
+            {% else %}
+                <div class="user" style="background-image:url('/media/profile_image/gentle-standart.jpg')">
+            {% endif %}
+          {% else %}
+          <div class="chat friend">
+            {% if interlocutor.is_staff %}
+            <div class="user" style="background-image:url('/media/profile_image/staff-standart.jpg')">
+            {% elif interlocutor.userprofille.image %}
+            <div class="user" style="background-image:url('{{ interlocutor.userprofille.image.url }}')">
+            {% else %}
+                <div class="user" style="background-image:url('/media/profile_image/gentle-standart.jpg')">
+            {% endif %}
+          {% endif %}
+            </div>
+            <p class="chat-message">{{ message.text }}</p>
+          </div>
+        {% endfor %}
+      </div>
+      <div class="chat-form">
+        <input
+            id="chat-message-input"
+            type="text"
+            class="form-control"
+            size="100"
+            placeholder="Введите сообщение..."
+            aria-label="Recipient's username"
+            aria-describedby="basic-addon2"
+          />
+          <button id="chat-message-submit" type="button">Отправить</button>
+      </div>
+    </div>
+  </div>
+</div>
+<script>
+  var chatList = document.getElementById('chat-log');
+  chatList.scrollTop = chatList.scrollHeight;
+</script>
+<script>
+    var roomName = {{ room_name_json }};
+
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chat/' + roomName + '/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        var message = data['message'];
+        var pk = data['pk'];
+        var msg_date = data['msg_date'];
+        // document.querySelector('.chat-body').value += (message + '\n');
+        var msg_in_html = `<div class="chat `;
+        if (pk=={{request.user.id}}){
+          msg_in_html += `self">`;
+          msg_in_html += `<div class="user" style="background-image:url('`;
+          {% if request.user.is_staff %}
+          msg_in_html += `/media/profile_image/staff-standart.jpg`;
+          {% elif request.user.userprofille.image %}
+          msg_in_html += `{{ request.user.userprofille.image.url }}`;
+          {% else %}
+            msg_in_html += `/media/profile_image/gentle-standart.jpg`;
+          {% endif %}
+        } else {
+          msg_in_html += `friend">`;
+          msg_in_html += `<div class="user" style="background-image:url('`;
+          {% if interlocutor.is_staff %}
+          msg_in_html += `/media/profile_image/staff-standart.jpg`;
+          {% elif interlocutor.userprofille.image %}
+          msg_in_html += `{{ interlocutor.userprofille.image.url }}`;
+          {% else %}
+            msg_in_html += `/media/profile_image/gentle-standart.jpg`;
+          {% endif %}
+        };
+        msg_in_html += `')"></div><p class="chat-message">`+message+`</p></div>`;
+        console.log(msg_in_html);
+        $('.chatlogs').append(msg_in_html);
+        if (pk=={{request.user.id}}){
+          var chatList = document.getElementById('chat-log');
+          chatList.scrollTop = chatList.scrollHeight;
+        };
+    };
+
+    <!--chatSocket.onclose = function(e) {-->
+        <!--console.error('Chat socket closed unexpectedly');-->
+    <!--};-->
+
+    <!--document.querySelector('#chat-message-input').focus();-->
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+
+        if (e.keyCode === 13) {  // enter, return
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var message = messageInputDom.value;
+        if (message != '') {
+          chatSocket.send(JSON.stringify({
+            'pk': {{ request.user.id }},
+            'message': message
+
+          }));
+        };
+
+        messageInputDom.value = '';
+    };
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <div class="row">
+            <div class="col-xs-10">
+                <h2 class="text-center alert alert-info">Асинхронный чат. Введите название комнаты, к которой хотите присоединиться</h2><br/>
+                <input id="room-name-input" type="text" size="85" placeholder="Введите название чата...">
+                <br>
+                <br>
+                <input class="btn btn-success btn-lg" id="room-name-submit" type="button" value="Войти"/>
+
+                <script>
+                    <!--document.querySelector('#room-name-input').focus();-->
+                    document.querySelector('#room-name-input').onkeyup = function(e) {
+                        if (e.keyCode === 13) {  // enter, return
+                            document.querySelector('#room-name-submit').click();
+                        }
+                    };
+
+                    document.querySelector('#room-name-submit').onclick = function(e) {
+                        var roomName = document.querySelector('#room-name-input').value;
+                        window.location.pathname = '/chat/' + roomName + '/';
+                    };
+                </script>
+            </div>
+        </div>
+        <br>
+        <div class="row">
+            <div class="col-xs-10">
+        <h2 class="text-center alert alert-info">Глобальный чат</h2>
+                <br>
+                <form method="post">
+            {% csrf_token %}
+            {{ form.post }}
+            <br>
+            <button type="submit" class="btn btn-success btn-lg">Подтвердить</button>
+        </form>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-xs-10">
+        <h4>Последние 5 сообщений:</h4>
+        {% for ms in msg %}
+            <div class="col-xs-10">
+                    <div id="tb-testimonial" class="testimonial testimonial-success">
+                        <div class="testimonial-section" style="font-size: 24px;">
+                             {{ms.post}}
+                            <br>
+                        </div>
+                    <div class="testimonial-desc">
+                    <div class="testimonial-writer">
+                    	<div class="testimonial-writer-name" style="font-size: 18px;">{{ ms.user.get_full_name }}</div>
+                    	<div class="testimonial-writer-designation" style="font-size: 16px;">{{ ms.created }}</div>
+
+                    </div>
+                    </div>
+                    </div>
+		        </div>
+        {% endfor %}
+        <a href="{% url 'home:allmessage_global' %}" class="btn btn-info btn-lg">Показать все сообщения глобального чата</a>
+        <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
+            </div>
+        </div>
+
+    </div>
+
+        <br>
+    <div class="col-md-4 alert alert-info">
+        {% if friends %}
+            <h2>Ваши друзья:</h2>
+                {% for friend in friends %}
+                    <a href="{% url 'accounts:view_profile_with_pk' pk=friend.pk %}">
+                        <div class="row">
+                            <div class="col-xs-2">
+                                 {% if friend.userprofile.image %}
+                                     <img src="{{ friend.userprofile.image.url }}" width="50" height="50">
+                                 {% endif %}
+                            </div>
+                            <div class="col-xs-10">
+                                <p style="font-size: 35px;">{{ friend.username }}</p>
+                            </div>
+                        </div>
+
+                    </a>
+                    <a href="/messages/{{friend.pk}}-{{request.user.id}}">
+                    <!--<a href="{% url 'ourmessageuser:room' room_name=friend.username %}">-->
+                        <h3><b>Открыть диалог с</b> {{ friend.username }}</h3>
+                    <!--</a>-->
+                    </a>
+                    <a href="{% url 'home:change_friends' operation='remove' pk=friend.pk %}">
+                    <button type="button" class="btn btn-default">Удалить из друзей</button>
+                    </a>
+                <br>
+                <hr>
+
+        <!--<form action="{% url 'home:send_msg' pk=friend.pk %}" method="post">-->
+            <!--{% csrf_token %}-->
+            <!--{{form.post}}-->
+            <!--<br>-->
+            <!--<button type="submit" class="btn btn-default">Отправить</button>-->
+        <!--</form>-->
+
+                {% endfor %}
+            <br>
+            <a href="{% url 'home:friend' %}" class="btn btn-info btn-lg">Посмотреть список всех друзей</a>
+        {% else %}
+            <h2>У Вас нет друзей</h2>
+        {% endif %}
+        <hr>
+        <h2>Другие пользователи:</h2>
+        <br>
+        {% for user in users %}
+            {% if not user in friends %}
+                <a href="{% url 'accounts:view_profile_with_pk' pk=user.pk %}">
+                    <div class="row">
+                        <div class="col-xs-2">
+                            {% if user.userprofile.image %}
+                                <img src="{{ user.userprofile.image.url }}" width="50" height="50">
+                            {% endif %}
+                        </div>
+                        <div class="col-xs-8">
+                            <p style="font-size: 35px;">{{ user.username }}</p>
+                            <br>
+                        </div>
+                    </div>
+                </a>
+
+                <a href="{% url 'home:change_friends' operation='add' pk=user.pk %}">
+                <button type="button" class="btn btn-success">Добавить в друзья</button>
+                </a>
+                <hr>
+            {% endif %}
+        {% endfor %}
+        <a href="{% url 'home:users' %}" class="btn btn-info btn-lg">Посмотреть список всех пользователей</a>
+
+    </div>
+</div>
+</div>
+</div>
+</div>
+
+
+{% endblock %}

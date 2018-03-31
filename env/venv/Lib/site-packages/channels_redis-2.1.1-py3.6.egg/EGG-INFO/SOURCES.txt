@@ -1,0 +1,11 @@
+README.rst
+setup.cfg
+setup.py
+channels_redis/__init__.py
+channels_redis/core.py
+channels_redis.egg-info/PKG-INFO
+channels_redis.egg-info/SOURCES.txt
+channels_redis.egg-info/dependency_links.txt
+channels_redis.egg-info/not-zip-safe
+channels_redis.egg-info/requires.txt
+channels_redis.egg-info/top_level.txt

@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+<title>Профиль</title>
+{% endblock %}
+
+{% block body %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-4">
+            <br>
+            <br>
+            {% if user.userprofile.image %}
+                <img src="{{ user.userprofile.image.url }}" width="300" height="300">
+            {% endif %}
+        </div>
+        <div class="col-xs-4">
+            <br>
+            <h2 class="alert alert-info">Ваш профиль:</h2>
+            <p><b>Ник</b>: {{ user }}</p>
+            <p><b>Имя</b>: {{ user.first_name }}</p>
+            <p><b>Фамилия</b>: {{ user.last_name }}</p>
+            <p><b>Email</b>: {{ user.email }}</p>
+            <p><b>Описание</b>: {{ user.userprofile.description }}</p>
+            <p><b>Телефон</b>: {{ user.userprofile.phone }}</p>
+            <p><b>Город</b>: {{ user.userprofile.city }}</p>
+            <p><b>Веб-сайт</b>: {{ user.userprofile.website }}</p>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -1,0 +1,18 @@
+
+
+body{margin: 0; padding: 0}
+ #pixie
+ {
+     position:fixed;
+     background-color: #164979;
+     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#040429', endColorstr='#257EB7',GradientType=0 ); /* IE6-9 */
+     background: -ms-linear-gradient(top,  #0E2A55 40%,#0E2A55 40%,#1D6196 60%); /* IE10+ */
+     background: -webkit-gradient(linear, center top, center bottom, from(#040429), to(#257EB7)); /* Chrome, Safari 4+ */
+     background: -webkit-linear-gradient(center top , #040429, #257EB7) repeat scroll 0 0 rgba(0, 0, 0, 0); /* Chrome 10-25, iOS 5+, Safari 5.1+ */
+     background:    -moz-linear-gradient(center top , #040429, #257EB7) repeat scroll 0 0 rgba(0, 0, 0, 0); /* Firefox 3.6-15 */
+     background:      -o-linear-gradient(center top , #040429, #257EB7) repeat scroll 0 0 rgba(0, 0, 0, 0); /* Opera 11.10-12.00 */
+     background:         linear-gradient(center top , #040429, #257EB7) repeat scroll 0 0 rgba(0, 0, 0, 0); /* Chrome 26, Firefox 16+, IE 10+, Opera 12.10+ */
+     margin:0;
+     padding:0;
+     background-size: 100% 100%;
+     }

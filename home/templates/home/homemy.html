@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<h2 class="alert alert-info text-center">Ваши аудиозаписи:</h2>
+{% for music in musics %}
+<div class="container">
+    <div class="row">
+        <br>
+        <div class="col-xs-5">
+            <audio controls>
+                <source src="{{music}}" type="audio/mp3">
+            </audio>
+            <hr>
+        </div>
+    </div>
+</div>
+
+<!--<h2>{{music}}</h2>-->
+<!--<h2>{{music.users.text}}</h2>-->
+<!--<h2>{{music.users.text}}</h2>-->
+<!--<div class="alert alert-info">-->
+                    <!--<div class="row">-->
+                        <!--<div class="col-xs-2">-->
+                            <!--{% if music.users.image %}-->
+                                <!--<img src="{{ music.users.image.url }}" width="150" height="150">-->
+                            <!--{% endif %}-->
+                        <!--</div>-->
+                        <!--<div class="col-xs-10">-->
+                            <!--<h2><b>Название:</b>{{music.users.text}} - Опубликовано: {{ music.users.data_time }}</h2>-->
+                            <!--<audio controls>-->
+                                <!--<source src="{{music.users.our_file.url}}" type="audio/mp3">-->
+                            <!--</audio>-->
+                            <!--<h3>Опубликовал: {{ music.users.user.get_full_name }}</h3>-->
+
+                        <!--</div>-->
+                    <!--</div>-->
+
+
+                <!--</div>-->
+
+
+<!--<h3>{{ music.users.our_file.url }}</h3>-->
+{% endfor %}
+{% endblock %}

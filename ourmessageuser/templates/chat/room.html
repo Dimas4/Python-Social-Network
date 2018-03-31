@@ -1,0 +1,90 @@
+{% extends 'base.html' %}
+{% load static%}
+{% block body %}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8"/>
+    <title>Чат</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+        <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css" rel="stylesheet" id="bootstrap-css">
+        <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.0/js/bootstrap.min.js"></script>
+        <script src="//code.jquery.com/jquery-1.11.1.min.js"></script>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        {% block head %}
+        <title>Base</title>
+        {% endblock %}
+        <link rel="stylesheet" href="{% static 'css/bootstrap.css' %}">
+        <link rel="stylesheet" href="{% static 'css/stylenew.css' %}">
+        <link rel="stylesheet" href="{% static 'css/font-awesome.css' %}" >
+        <link rel="stylesheet" href="{% static 'css/style.css'%}" >
+        <link rel="stylesheet" href="{% static 'css/col.css'%}" >
+        <link rel="stylesheet" href="{% static 'css/st.css'%}" >
+</head>
+<br>
+
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-xs-12">
+                <textarea id="chat-log" cols="100" rows="20" class="alert alert-info" style="font-size:20px;">
+                    {% for messages in messagess %}
+                        Сообщение от пользователя {{messages.user.username}} : {{messages.text}} - {{messages.data_create}}
+                    {% endfor %}
+                </textarea>
+                <script>
+                    var chatList = document.getElementById('chat-log');
+                    chatList.scrollTop = chatList.scrollHeight;
+                </script>
+                <br>
+                <hr>
+                <input id="chat-message-input" type="text" size="100" placeholder="Введите текст...">
+                <br><br>
+                <input class="btn btn-success btn-lg" id="chat-message-submit" type="button" value="Отправить">
+            </div>
+        </div>
+    </div>
+
+</body>
+<script>
+    var roomName = {{ room_name_json }};
+
+    var chatSocket = new WebSocket(
+        'ws://' + window.location.host +
+        '/ws/chat/' + roomName + '/');
+
+    chatSocket.onmessage = function(e) {
+        var data = JSON.parse(e.data);
+        <!--var name = {{user.get_full_name}}-->
+        var chatList = document.getElementById('chat-log');
+        chatList.scrollTop = chatList.scrollHeight;
+        var message ='\t \t \t Новое сообщение: ' +  data['message'];
+        document.querySelector('#chat-log').value += (message + '\n' + '\n');
+    };
+
+    chatSocket.onclose = function(e) {
+        console.error('Chat socket closed unexpectedly');
+    };
+
+    document.querySelector('#chat-message-input').focus();
+    document.querySelector('#chat-message-input').onkeyup = function(e) {
+        if (e.keyCode === 13) {  // enter, return
+            var chatList = document.getElementById('chat-log');
+            chatList.scrollTop = chatList.scrollHeight;
+            document.querySelector('#chat-message-submit').click();
+        }
+    };
+
+    document.querySelector('#chat-message-submit').onclick = function(e) {
+        var messageInputDom = document.querySelector('#chat-message-input');
+        var chatList = document.getElementById('chat-log');
+        chatList.scrollTop = chatList.scrollHeight;
+        var message = messageInputDom.value;
+        chatSocket.send(JSON.stringify({
+            'message': message
+        }));
+
+        messageInputDom.value = '';
+    };
+</script>
+{% endblock %}

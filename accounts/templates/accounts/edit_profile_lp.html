@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+
+
+{% block head %}
+<title>Изменение профиля</title>
+{% endblock %}
+
+{% block body %}
+<br>
+<div class="container">
+    <div class="row">
+        <div class="col-xs-6">
+            <form method="post">
+                {% csrf_token %}
+                <h3>Введите новый Email:</h3>
+                {{ form.email }}
+                <h3>Введите имя:</h3>
+                {{ form.first_name }}
+                <h3>Введите фамилию:</h3>
+                {{ form.last_name }}
+                <h3>Введите "Подтвердить":</h3>
+                {{ form.password }}
+                <br>
+                <button type="submit" class="btn btn-success btn-lg">Подтвердить</button>
+            </form>
+        </div>
+    </div>
+
+    <br>
+</div>
+
+{% endblock %}

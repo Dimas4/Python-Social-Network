@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block body %}
+<div class="container">
+    <div class="row">
+        <div class="col-xs-8">
+            <form enctype="multipart/form-data" action="" method="post">
+                {% csrf_token %}
+                {{form.text}}
+                <br>
+                {{form.artist}}
+                <hr>
+                {{form.our_file}}
+                <br>
+                {{form.image}}
+                <button type="submit" class="btn btn-success btn-lg">Подтвердить</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
