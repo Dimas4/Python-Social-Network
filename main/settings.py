@@ -44,10 +44,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'tutorial.middleware.LoginRequiredMiddleware'
+    'main.middleware.LoginRequiredMiddleware'
 ]
 
-ROOT_URLCONF = 'tutorial.urls'
+ROOT_URLCONF = 'main.urls'
 
 TEMPLATES = [
     {
@@ -65,7 +65,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'tutorial.wsgi.application'
+WSGI_APPLICATION = 'main.wsgi.application'
 
 
 # Database
@@ -142,7 +142,7 @@ MEDIA_URL = '/static/media/'
 MEDIA_ROOT = 'D:/ZadaniaOtAndreia/Django-Tutorials-master/static/media/'
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'tutorial/media')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'main/media')
 
 LOGIN_REDIRECT_URL = '/home/'
 
@@ -160,7 +160,7 @@ LOGIN_EXEMPT_URLS = (
 EMAIL_HOST = 'localhost'
 EMAIL_PORT = 1025
 
-ASGI_APPLICATION = 'tutorial.routing.application'
+ASGI_APPLICATION = 'main.routing.application'
 CHANNEL_LAYERS = {
     'default': {
         'BACKEND': 'channels_redis.core.RedisChannelLayer',
