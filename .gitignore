@@ -3,5 +3,3 @@ db.sqlite3
 /tutorial/settings/local
 env
 .git
-env
-venv
