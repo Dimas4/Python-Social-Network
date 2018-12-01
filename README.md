@@ -1,2 +1,2 @@
 # Python-Social-Network
-This is my own social network, I created using Django, Channels 2
+This is my freelance project. Social network! I created using Django, Channels 2
